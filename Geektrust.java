@@ -2,8 +2,8 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.util.HashMap;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 public class Geektrust {
 	private static final HashMap<String, String> KINGDOM_VS_EMBLEM = new HashMap<>();
@@ -30,12 +30,12 @@ public class Geektrust {
             File file = new File(args[0]);
             BufferedReader br = new BufferedReader(new FileReader(file));
             String inputLineStr;
-            List<String> allies = null;
+            Set<String> allies = null;
             while ((inputLineStr = br.readLine()) != null) {
 
                 // split the input line into 2 parts
                 // first part is kingdom name and second part is secret message
-                String[] inputLineStrArr = inputLineStr.split(" ");
+                String[] inputLineStrArr = inputLineStr.split(" ", 2);
 
                 // get the cipher key for the input kingdom
                 int cipherKey = KINGDOM_VS_EMBLEM.get(inputLineStrArr[0]).length();
@@ -44,7 +44,7 @@ public class Geektrust {
                 StringBuilder decryptedMessage = new StringBuilder();
                 String secretMessage = inputLineStrArr[1];
                 for (int i = 0; i < secretMessage.length(); i++) {
-                    // checking for valid characters
+					// checking for valid characters
                     if (secretMessage.charAt(i) >= 'A' && secretMessage.charAt(i) <= 'Z') {
                         char c = (char) ((int) secretMessage.charAt(i) - cipherKey);
                         if (c < 'A') {
@@ -53,8 +53,6 @@ public class Geektrust {
                             c = (char) ((int) c - ALPHABETS_COUNT);
                         }
                         decryptedMessage.append(c);
-                    } else {
-                        System.out.println("Invalid character in secret message");
                     }
                 }
 
@@ -74,7 +72,7 @@ public class Geektrust {
                 }
                 if (isWonKingdom) {
                     if (allies == null) {
-                        allies = new ArrayList<>();
+                        allies = new HashSet<>();
                     }
                     allies.add(inputLineStrArr[0]);
                 }
