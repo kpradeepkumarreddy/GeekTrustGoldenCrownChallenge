@@ -2,6 +2,8 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Geektrust {
 private static final HashMap<String, String> kingdomVsEmblem = new HashMap<>();
@@ -27,18 +29,17 @@ private static final HashMap<String, String> kingdomVsEmblem = new HashMap<>();
             File file = new File(args[0]);
             BufferedReader br = new BufferedReader(new FileReader(file));
             String inputLineStr;
-            int alliesIndex = 0;
-            String[] allies = new String[3];
+            List<String> allies = null;
             while ((inputLineStr = br.readLine()) != null) {
                 System.out.println(inputLineStr);
 
                 // split the input line into 2 parts
                 // first part is kingdom name and second part is secret message
                 String[] inputLineStrArr = inputLineStr.split(" ");
-                
+
                 // get the cipher key for the input kingdom
                 int cipherKey = kingdomVsEmblem.get(inputLineStrArr[0]).length();
-               
+
                 // Decrypt the input message using the cipher key
                 StringBuilder decryptedMessage = new StringBuilder();
                 String secretMessage = inputLineStrArr[1];
@@ -51,12 +52,12 @@ private static final HashMap<String, String> kingdomVsEmblem = new HashMap<>();
                         } else if (c > 'Z') {
                             c = (char) ((int) c - 26);
                         }
-						decryptedMessage.append(c);
+                        decryptedMessage.append(c);
                     } else {
                         System.out.println("Invalid character in secret message");
                     }
                 }
-               
+
                 // If the decrypted message has all the character of emblem, then print
                 // the name of the kingdom to the console
                 String emblem = kingdomVsEmblem.get(inputLineStrArr[0]);
@@ -65,26 +66,28 @@ private static final HashMap<String, String> kingdomVsEmblem = new HashMap<>();
                     int charIndex = decryptedMessage.indexOf(String.valueOf(emblem.charAt(i)));
                     // if the characters in emblem are not present in decrypted message then break the loop
                     if (charIndex != -1) {
-                       decryptedMessage = decryptedMessage.deleteCharAt(charIndex);
+                        decryptedMessage = decryptedMessage.deleteCharAt(charIndex);
                     } else {
                         isWonKingdom = false;
                         break;
                     }
                 }
                 if (isWonKingdom) {
-                    allies[alliesIndex++] = inputLineStrArr[0];
-                    if (alliesIndex == 3) {
-                        System.out.print("SPACE ");
-                        for (String ally : allies) {
-                            System.out.print(ally + " ");
-                        }
-                        break;
+                    if (allies == null) {
+                        allies = new ArrayList<>();
                     }
+                    allies.add(inputLineStrArr[0]);
                 }
             }
+
             // SPACE kingdom did not get enough allies
-            if (alliesIndex < 3) {
+            if (allies.size() < 3) {
                 System.out.print("NONE");
+            } else {
+                System.out.print("SPACE ");
+                for (String ally : allies) {
+                    System.out.print(ally + " ");
+                }
             }
         } catch (Exception ex) {
             System.out.println("Exception = " + ex);
