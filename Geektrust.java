@@ -6,15 +6,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Geektrust {
-private static final HashMap<String, String> kingdomVsEmblem = new HashMap<>();
+	private static final HashMap<String, String> KINGDOM_VS_EMBLEM = new HashMap<>();
+    private static final int ALPHABETS_COUNT = 26, MIN_ALLIES_SUPPORT = 3;
 
     static {
         // initializing kingdoms versus emblems in a hashmap
-        kingdomVsEmblem.put("LAND", "PANDA");
-        kingdomVsEmblem.put("WATER", "OCTOPUS");
-        kingdomVsEmblem.put("ICE", "MAMMOTH");
-        kingdomVsEmblem.put("AIR", "OWL");
-        kingdomVsEmblem.put("FIRE", "DRAGON");
+        KINGDOM_VS_EMBLEM.put("LAND", "PANDA");
+        KINGDOM_VS_EMBLEM.put("WATER", "OCTOPUS");
+        KINGDOM_VS_EMBLEM.put("ICE", "MAMMOTH");
+        KINGDOM_VS_EMBLEM.put("AIR", "OWL");
+        KINGDOM_VS_EMBLEM.put("FIRE", "DRAGON");
     }
 
     public static void main(String[] args) {
@@ -31,14 +32,13 @@ private static final HashMap<String, String> kingdomVsEmblem = new HashMap<>();
             String inputLineStr;
             List<String> allies = null;
             while ((inputLineStr = br.readLine()) != null) {
-                System.out.println(inputLineStr);
 
                 // split the input line into 2 parts
                 // first part is kingdom name and second part is secret message
                 String[] inputLineStrArr = inputLineStr.split(" ");
 
                 // get the cipher key for the input kingdom
-                int cipherKey = kingdomVsEmblem.get(inputLineStrArr[0]).length();
+                int cipherKey = KINGDOM_VS_EMBLEM.get(inputLineStrArr[0]).length();
 
                 // Decrypt the input message using the cipher key
                 StringBuilder decryptedMessage = new StringBuilder();
@@ -48,9 +48,9 @@ private static final HashMap<String, String> kingdomVsEmblem = new HashMap<>();
                     if (secretMessage.charAt(i) >= 'A' && secretMessage.charAt(i) <= 'Z') {
                         char c = (char) ((int) secretMessage.charAt(i) - cipherKey);
                         if (c < 'A') {
-                            c = (char) ((int) c + 26);
+                            c = (char) ((int) c + ALPHABETS_COUNT);
                         } else if (c > 'Z') {
-                            c = (char) ((int) c - 26);
+                            c = (char) ((int) c - ALPHABETS_COUNT);
                         }
                         decryptedMessage.append(c);
                     } else {
@@ -60,7 +60,7 @@ private static final HashMap<String, String> kingdomVsEmblem = new HashMap<>();
 
                 // If the decrypted message has all the character of emblem, then print
                 // the name of the kingdom to the console
-                String emblem = kingdomVsEmblem.get(inputLineStrArr[0]);
+                String emblem = KINGDOM_VS_EMBLEM.get(inputLineStrArr[0]);
                 boolean isWonKingdom = true;
                 for (int i = 0; i < emblem.length(); i++) {
                     int charIndex = decryptedMessage.indexOf(String.valueOf(emblem.charAt(i)));
@@ -80,8 +80,8 @@ private static final HashMap<String, String> kingdomVsEmblem = new HashMap<>();
                 }
             }
 
-            // SPACE kingdom did not get enough allies
-            if (allies.size() < 3) {
+            // SPACE kingdom did not get enough allies support
+            if (allies.size() < MIN_ALLIES_SUPPORT) {
                 System.out.print("NONE");
             } else {
                 System.out.print("SPACE ");
