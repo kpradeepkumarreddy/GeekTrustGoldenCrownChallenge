@@ -2,7 +2,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 public class Geektrust {
@@ -72,7 +72,7 @@ public class Geektrust {
                 }
                 if (isWonKingdom) {
                     if (allies == null) {
-                        allies = new HashSet<>();
+                        allies = new LinkedHashSet<>();
                     }
                     allies.add(inputLineStrArr[0]);
                 }
